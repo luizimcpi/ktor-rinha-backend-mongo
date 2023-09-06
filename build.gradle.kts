@@ -34,4 +34,6 @@ dependencies {
     implementation("org.litote.kmongo:kmongo:$kmongo_version")
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.9.2")
+
 }

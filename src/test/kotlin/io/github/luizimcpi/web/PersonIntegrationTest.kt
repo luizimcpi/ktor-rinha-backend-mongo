@@ -125,6 +125,27 @@ class PersonIntegrationTest {
     }
 
     @Test
+    fun shouldCreatePersonFailWhenRequestContainsEmptyNickname() = testApplication {
+        environment {
+            config = ApplicationConfig("application-test.conf")
+        }
+        application {
+            configureRouting()
+        }
+        val request = "{\n" +
+                "    \"apelido\": \"\",\n" +
+                "    \"nome\": \"Luiz\",\n" +
+                "    \"nascimento\": \"1990-03-03\",\n" +
+                "    \"stack\": [\"JAVA\"]\n" +
+                "}"
+        val response = client.post("/pessoas") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+        assertEquals(HttpStatusCode.UnprocessableEntity, response.status)
+    }
+
+    @Test
     fun shouldCreatePersonFailWhenRequestContainsNicknameUpperToThirtyTwoChars() = testApplication {
         environment {
             config = ApplicationConfig("application-test.conf")
@@ -145,5 +166,66 @@ class PersonIntegrationTest {
         assertEquals(HttpStatusCode.UnprocessableEntity, response.status)
     }
 
+    @Test
+    fun shouldCreatePersonFailWhenRequestDoesNotContainsName() = testApplication {
+        environment {
+            config = ApplicationConfig("application-test.conf")
+        }
+        application {
+            configureRouting()
+        }
+        val request = "{\n" +
+                "    \"apelido\": \"luizhse\",\n" +
+                "    \"nascimento\": \"1990-03-03\",\n" +
+                "    \"stack\": [\"JAVA\"]\n" +
+                "}"
+        val response = client.post("/pessoas") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+        assertEquals(HttpStatusCode.UnprocessableEntity, response.status)
+    }
+
+    @Test
+    fun shouldCreatePersonFailWhenRequestContainsEmptyName() = testApplication {
+        environment {
+            config = ApplicationConfig("application-test.conf")
+        }
+        application {
+            configureRouting()
+        }
+        val request = "{\n" +
+                "    \"apelido\": \"luizhse\",\n" +
+                "    \"nome\": \"\",\n" +
+                "    \"nascimento\": \"1990-03-03\",\n" +
+                "    \"stack\": [\"JAVA\"]\n" +
+                "}"
+        val response = client.post("/pessoas") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+        assertEquals(HttpStatusCode.UnprocessableEntity, response.status)
+    }
+
+    @Test
+    fun shouldCreatePersonFailWhenRequestContainsNameUpperToOneHundredChars() = testApplication {
+        environment {
+            config = ApplicationConfig("application-test.conf")
+        }
+        application {
+            configureRouting()
+        }
+        val request = "{\n" +
+                "    \"apelido\": \"luizimcpi\",\n" +
+                "    \"nome\": \"zpZGRQXcAElbYJQcIutRfuZzjEBqAlzu zpZGRQXcAElbYJQcIutRfuZzjEBqAlzu zpZGRQXcAElbYJQcIutRfuZzjEBqAlzu zpZGRQXcAElbYJQcIutRfuZzjEBqAlzu\",\n" +
+                "    \"nascimento\": \"1990-03-03\",\n" +
+                "    \"stack\": [\"JAVA\"]\n" +
+                "}"
+        val response = client.post("/pessoas") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+        assertEquals(HttpStatusCode.UnprocessableEntity, response.status)
+    }
 
 }

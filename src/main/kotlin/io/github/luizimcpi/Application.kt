@@ -2,7 +2,8 @@ package io.github.luizimcpi
 
 import io.github.luizimcpi.configuration.configureRouting
 import io.github.luizimcpi.configuration.configureSerialization
-import io.github.luizimcpi.web.validation.configureValidation
+import io.github.luizimcpi.configuration.configureStatusPages
+import io.github.luizimcpi.configuration.configureValidation
 import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -14,8 +15,8 @@ fun main() {
 }
 
 fun Application.module() {
-
     configureRouting()
     configureSerialization()
     configureValidation()
+    configureStatusPages()
 }

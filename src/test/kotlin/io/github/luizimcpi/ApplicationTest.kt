@@ -17,7 +17,7 @@ class ApplicationTest {
             config = ApplicationConfig("application-test.conf")
         }
         application {
-            val mongoUrl = environment.config.propertyOrNull("ktor.mongo.url")?.getString() ?: "mongodb://localhost:27017" //only example
+            environment.config.propertyOrNull("ktor.mongo.url")?.getString() ?: "mongodb://localhost:27017" //only example not in use
             configureRouting()
         }
         client.get("/").apply {

@@ -12,7 +12,7 @@ fun PersonRequest.toPerson(): Person =
     Person(
         uuid = UUID.randomUUID().toString(),
         apelido = this.apelido!!,
-        nome = this.nome,
+        nome = this.nome!!,
         nascimento = this.nascimento,
         stack = this.stack
     )

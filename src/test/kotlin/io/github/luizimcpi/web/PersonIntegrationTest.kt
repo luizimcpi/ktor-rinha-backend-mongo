@@ -3,6 +3,7 @@ package io.github.luizimcpi.web
 import de.flapdoodle.embed.mongo.MongodProcess
 import io.github.luizimcpi.configuration.configureRouting
 import io.github.luizimcpi.startMongo
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
@@ -11,6 +12,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
+import java.util.UUID
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -403,6 +405,52 @@ class PersonIntegrationTest {
             setBody(request)
         }
         assertEquals(HttpStatusCode.BadRequest, response.status)
+    }
+
+    @Test
+    fun shouldFindPersonByIdPersonFailWhenDoesNotExists() = testApplication {
+        environment {
+            config = ApplicationConfig("application-test.conf")
+        }
+        application {
+            configureRouting()
+        }
+
+        val response = client.get("/pessoas/${UUID.randomUUID()}") {
+            contentType(ContentType.Application.Json)
+        }
+        assertEquals("{    \"message\": \"Pessoa não encontrada\"}", response.bodyAsText().replace("\n", ""))
+        assertEquals(HttpStatusCode.NotFound, response.status)
+    }
+
+    @Test
+    fun shouldFindPersonByIdPersonSuccessWhenExists() = testApplication {
+        environment {
+            config = ApplicationConfig("application-test.conf")
+        }
+        application {
+            configureRouting()
+        }
+        val creationRequest = "{\n" +
+                "    \"apelido\": \"luizhse\",\n" +
+                "    \"nome\": \"Luiz\",\n" +
+                "    \"nascimento\": \"1990-03-03\",\n" +
+                "    \"stack\": [\"JAVA 8\",\"JAVA 11\",\"JAVA 17\"]\n" +
+                "}"
+        val creationResponse = client.post("/pessoas") {
+            contentType(ContentType.Application.Json)
+            setBody(creationRequest)
+        }
+        assertEquals(HttpStatusCode.Created, creationResponse.status)
+        assertNotNull(creationResponse.headers["Location"])
+
+        val personId = creationResponse.headers["Location"]
+
+        val searchResponse = client.get("/pessoas/$personId") {
+            contentType(ContentType.Application.Json)
+        }
+        assertEquals(HttpStatusCode.OK, searchResponse.status)
+        assertNotNull(searchResponse.bodyAsText())
     }
 
 }

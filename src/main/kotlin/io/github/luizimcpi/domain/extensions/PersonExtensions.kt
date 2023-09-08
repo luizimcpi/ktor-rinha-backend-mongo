@@ -2,6 +2,7 @@ package io.github.luizimcpi.domain.extensions
 
 import io.github.luizimcpi.domain.model.entity.Person
 import io.github.luizimcpi.domain.model.request.PersonRequest
+import io.github.luizimcpi.domain.model.response.PersonResponse
 import io.github.luizimcpi.resource.repository.mongo.collection.MongoPersonCollection
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -10,7 +11,6 @@ import java.util.UUID
 
 fun PersonRequest.toPerson(): Person =
     Person(
-        uuid = UUID.randomUUID().toString(),
         apelido = this.apelido!!,
         nome = this.nome!!,
         nascimento = this.nascimento!!,
@@ -33,5 +33,14 @@ fun MongoPersonCollection.toPerson(): Person =
         nome = this.nome,
         nascimento = this.nascimento.format(
             DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+        stack = this.stack
+    )
+
+fun Person.toPersonResponse(): PersonResponse =
+    PersonResponse(
+        uuid = this.uuid!!,
+        apelido = this.apelido,
+        nome = this.nome,
+        nascimento = this.nascimento,
         stack = this.stack
     )

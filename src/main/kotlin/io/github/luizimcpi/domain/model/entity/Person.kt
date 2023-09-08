@@ -1,7 +1,7 @@
 package io.github.luizimcpi.domain.model.entity
 
 data class Person(
-    val uuid: String,
+    val uuid: String? = null,
     val apelido: String,
     val nome: String,
     val nascimento: String,

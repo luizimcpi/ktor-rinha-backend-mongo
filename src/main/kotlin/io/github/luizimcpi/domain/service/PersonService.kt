@@ -12,7 +12,11 @@ class PersonService {
         if(personRepository.findByNickname(person.apelido).isNotEmpty()){
             throw RequestValidationException("", listOf("Impossible store person with this nickname"))
         }
-        personRepository.save(person)
-        return person.uuid
+        val persistedPerson = personRepository.save(person)
+        return persistedPerson.uuid
+    }
+
+    fun findById(id: String): Person? {
+        return personRepository.findById(id)
     }
 }

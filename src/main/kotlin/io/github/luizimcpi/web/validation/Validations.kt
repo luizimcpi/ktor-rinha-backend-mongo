@@ -16,6 +16,8 @@ fun Application.configureValidation() {
         validate<PersonRequest> { personRequest ->
             if (personRequest.apelido == null)
                 ValidationResult.Invalid("apelido must not be null")
+            else if (personRequest.apelido != null && personRequest.apelido!!.length > 32)
+                ValidationResult.Invalid("apelido must contain a maximum of 32 chars")
             else ValidationResult.Valid
         }
     }

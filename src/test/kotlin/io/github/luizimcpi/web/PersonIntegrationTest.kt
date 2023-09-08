@@ -64,6 +64,27 @@ class PersonIntegrationTest {
             configureRouting(mongoUrl)
         }
         val request = "{\n" +
+                "    \"apelido\": \"luzicmpi\",\n" +
+                "    \"nome\": \"Luiz\",\n" +
+                "    \"nascimento\": \"1990-03-03\"\n" +
+                "}"
+        val response = client.post("/pessoas") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+        assertEquals(HttpStatusCode.Created, response.status)
+    }
+
+    @Test
+    fun shouldCreatePersonFailWhenAlreadyExistsSameNicknameInDatabase() = testApplication {
+        environment {
+            config = ApplicationConfig("application-test.conf")
+        }
+        application {
+            val mongoUrl = environment.config.propertyOrNull("ktor.mongo.url")?.getString() ?: "mongodb://localhost:27017"
+            configureRouting(mongoUrl)
+        }
+        val request = "{\n" +
                 "    \"apelido\": \"luizhse\",\n" +
                 "    \"nome\": \"Luiz\",\n" +
                 "    \"nascimento\": \"1990-03-03\"\n" +
@@ -73,6 +94,17 @@ class PersonIntegrationTest {
             setBody(request)
         }
         assertEquals(HttpStatusCode.Created, response.status)
+
+        val invalidRequest = "{\n" +
+                "    \"apelido\": \"luizhse\",\n" +
+                "    \"nome\": \"Luiz\",\n" +
+                "    \"nascimento\": \"1990-03-03\"\n" +
+                "}"
+        val invalidResponse = client.post("/pessoas") {
+            contentType(ContentType.Application.Json)
+            setBody(invalidRequest)
+        }
+        assertEquals(HttpStatusCode.UnprocessableEntity, invalidResponse.status)
     }
 
     @Test
@@ -85,6 +117,28 @@ class PersonIntegrationTest {
             configureRouting(mongoUrl)
         }
         val request = "{\n" +
+                "    \"nome\": \"Luiz\",\n" +
+                "    \"nascimento\": \"1990-03-03\",\n" +
+                "    \"stack\": [\"JAVA\"]\n" +
+                "}"
+        val response = client.post("/pessoas") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+        assertEquals(HttpStatusCode.UnprocessableEntity, response.status)
+    }
+
+    @Test
+    fun shouldCreatePersonFailWhenRequestContainsNicknameUpperToThirtyTwoChars() = testApplication {
+        environment {
+            config = ApplicationConfig("application-test.conf")
+        }
+        application {
+            val mongoUrl = environment.config.propertyOrNull("ktor.mongo.url")?.getString() ?: "mongodb://localhost:27017"
+            configureRouting(mongoUrl)
+        }
+        val request = "{\n" +
+                "    \"apelido\": \"luizimcpiYFghrWQEcAsxzHKLoPwTUIpfsPvx\",\n" +
                 "    \"nome\": \"Luiz\",\n" +
                 "    \"nascimento\": \"1990-03-03\",\n" +
                 "    \"stack\": [\"JAVA\"]\n" +

@@ -12,9 +12,9 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 
-fun Route.personRouting(mongoUrl: String) {
+fun Route.personRouting() {
 
-    val personService = PersonService(mongoUrl)
+    val personService = PersonService()
 
     route("/pessoas") {
         post {

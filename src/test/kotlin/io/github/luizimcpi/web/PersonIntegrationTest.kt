@@ -19,7 +19,7 @@ import kotlin.test.assertNotNull
 
 class PersonIntegrationTest {
 
-    lateinit var mongodProcess: MongodProcess
+    private lateinit var mongodProcess: MongodProcess
 
     @BeforeTest
     fun setUp(){
@@ -37,8 +37,7 @@ class PersonIntegrationTest {
             config = ApplicationConfig("application-test.conf")
         }
         application {
-            val mongoUrl = environment.config.propertyOrNull("ktor.mongo.url")?.getString() ?: "mongodb://localhost:27017"
-            configureRouting(mongoUrl)
+            configureRouting()
         }
         val request = "{\n" +
                 "    \"apelido\": \"luizhse\",\n" +
@@ -60,8 +59,7 @@ class PersonIntegrationTest {
             config = ApplicationConfig("application-test.conf")
         }
         application {
-            val mongoUrl = environment.config.propertyOrNull("ktor.mongo.url")?.getString() ?: "mongodb://localhost:27017"
-            configureRouting(mongoUrl)
+            configureRouting()
         }
         val request = "{\n" +
                 "    \"apelido\": \"luzicmpi\",\n" +
@@ -81,8 +79,7 @@ class PersonIntegrationTest {
             config = ApplicationConfig("application-test.conf")
         }
         application {
-            val mongoUrl = environment.config.propertyOrNull("ktor.mongo.url")?.getString() ?: "mongodb://localhost:27017"
-            configureRouting(mongoUrl)
+            configureRouting()
         }
         val request = "{\n" +
                 "    \"apelido\": \"luizhse\",\n" +
@@ -113,8 +110,7 @@ class PersonIntegrationTest {
             config = ApplicationConfig("application-test.conf")
         }
         application {
-            val mongoUrl = environment.config.propertyOrNull("ktor.mongo.url")?.getString() ?: "mongodb://localhost:27017"
-            configureRouting(mongoUrl)
+            configureRouting()
         }
         val request = "{\n" +
                 "    \"nome\": \"Luiz\",\n" +
@@ -134,8 +130,7 @@ class PersonIntegrationTest {
             config = ApplicationConfig("application-test.conf")
         }
         application {
-            val mongoUrl = environment.config.propertyOrNull("ktor.mongo.url")?.getString() ?: "mongodb://localhost:27017"
-            configureRouting(mongoUrl)
+            configureRouting()
         }
         val request = "{\n" +
                 "    \"apelido\": \"luizimcpiYFghrWQEcAsxzHKLoPwTUIpfsPvx\",\n" +

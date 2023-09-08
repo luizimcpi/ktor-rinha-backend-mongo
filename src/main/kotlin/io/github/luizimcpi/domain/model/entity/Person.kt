@@ -4,6 +4,6 @@ data class Person(
     val uuid: String,
     val apelido: String,
     val nome: String,
-    val nascimento: String, //AAAA-MM-DD
+    val nascimento: String,
     val stack: Set<String>? = null
 )

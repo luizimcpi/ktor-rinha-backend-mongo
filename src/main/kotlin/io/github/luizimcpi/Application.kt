@@ -2,7 +2,9 @@ package io.github.luizimcpi
 
 import io.github.luizimcpi.configuration.configureRouting
 import io.github.luizimcpi.configuration.configureSerialization
+import io.github.luizimcpi.web.validation.configureValidation
 import io.ktor.server.application.Application
+import io.ktor.server.application.log
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 
@@ -13,7 +15,9 @@ fun main() {
 }
 
 fun Application.module() {
-    val mongoUrl = environment.config.propertyOrNull("ktor.mongo.url")?.getString() ?: "mongodb://localhost"
+    val mongoUrl = System.getenv("MONGO_URL") ?: "mongodb://localhost"
+    log.info("MONGO URL: $mongoUrl")
     configureRouting(mongoUrl)
     configureSerialization()
+    configureValidation()
 }

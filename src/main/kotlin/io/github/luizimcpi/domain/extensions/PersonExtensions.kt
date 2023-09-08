@@ -8,7 +8,7 @@ import java.util.UUID
 fun PersonRequest.toPerson(): Person =
     Person(
         uuid = UUID.randomUUID().toString(),
-        apelido = this.apelido,
+        apelido = this.apelido!!,
         nome = this.nome,
         nascimento = this.nascimento,
         stack = this.stack

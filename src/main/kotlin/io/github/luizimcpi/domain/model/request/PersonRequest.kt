@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PersonRequest(
-    val apelido: String,
+    val apelido: String? = null,
     val nome: String,
     val nascimento: String, //AAAA-MM-DD
-    val stack: Set<String>
+    val stack: Set<String>? = null
 )

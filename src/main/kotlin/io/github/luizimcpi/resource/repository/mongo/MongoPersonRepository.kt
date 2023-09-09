@@ -31,8 +31,6 @@ class MongoPersonRepository: PersonRepository {
     }
 
     override fun findById(id: String): Person? {
-        return personCollection.findOne(Person::uuid eq id)?.let {
-            it.toPerson()
-        }
+        return personCollection.findOne(Person::uuid eq id)?.toPerson()
     }
 }

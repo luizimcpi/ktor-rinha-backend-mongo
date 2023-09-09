@@ -6,7 +6,7 @@ interface PersonRepository {
 
     fun save(person: Person): Person
 
-    fun findByNickname(nickName: String): List<Person>
+    fun findByNickname(nickname: String): List<Person>
 
     fun findById(id: String): Person?
 }

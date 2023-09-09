@@ -586,4 +586,64 @@ class PersonIntegrationTest {
         assertTrue(searchResponse.bodyAsText().contains("Roberto"))
     }
 
+    @Test
+    fun shouldFindPersonQuantitySuccessWhenExistsSomePeopleInDatabase() = testApplication {
+        environment {
+            config = ApplicationConfig("application-test.conf")
+        }
+        application {
+            configureRouting()
+        }
+        val creationRequest = "{\n" +
+                "    \"apelido\": \"luizhse\",\n" +
+                "    \"nome\": \"Luiz\",\n" +
+                "    \"nascimento\": \"1990-03-03\",\n" +
+                "    \"stack\": [\"Java\",\"Oracle\",\"Kotlin\"]\n" +
+                "}"
+        val creationResponse = client.post("/pessoas") {
+            contentType(ContentType.Application.Json)
+            setBody(creationRequest)
+        }
+        assertEquals(HttpStatusCode.Created, creationResponse.status)
+        assertNotNull(creationResponse.headers["Location"])
+
+        val anotherCreationRequest = "{\n" +
+                "    \"apelido\": \"josé\",\n" +
+                "    \"nome\": \"José Roberto\",\n" +
+                "    \"nascimento\": \"2000-10-01\",\n" +
+                "    \"stack\": [\"C#\",\"Node\",\"Oracle\"]\n" +
+                "}"
+        val anotherCreationResponse = client.post("/pessoas") {
+            contentType(ContentType.Application.Json)
+            setBody(anotherCreationRequest)
+        }
+        assertEquals(HttpStatusCode.Created, anotherCreationResponse.status)
+        assertNotNull(anotherCreationResponse.headers["Location"])
+
+        val searchResponse = client.get("/contagem-pessoas") {
+            contentType(ContentType.Application.Json)
+        }
+        assertEquals(HttpStatusCode.OK, searchResponse.status)
+        assertNotNull(searchResponse.bodyAsText())
+        assertEquals("2", searchResponse.bodyAsText())
+    }
+
+    @Test
+    fun shouldFindPersonQuantitySuccessWhenNotExistsPeopleInDatabase() = testApplication {
+        environment {
+            config = ApplicationConfig("application-test.conf")
+        }
+        application {
+            configureRouting()
+        }
+
+        val searchResponse = client.get("/contagem-pessoas") {
+            contentType(ContentType.Application.Json)
+        }
+        assertEquals(HttpStatusCode.OK, searchResponse.status)
+        assertNotNull(searchResponse.bodyAsText())
+        assertEquals("0", searchResponse.bodyAsText())
+    }
+
+
 }

@@ -11,4 +11,6 @@ interface PersonRepository {
     fun findById(id: String): Person?
 
     fun findByTerm(searchTerm: String): List<Person>
+
+    fun count(): Long
 }

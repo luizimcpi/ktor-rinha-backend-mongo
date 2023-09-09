@@ -21,4 +21,8 @@ class PersonService(private val personRepository: PersonRepository) {
     fun findByTerm(searchTerm: String): List<Person> {
         return personRepository.findByTerm(searchTerm)
     }
+
+    fun count(): Long {
+        return personRepository.count()
+    }
 }

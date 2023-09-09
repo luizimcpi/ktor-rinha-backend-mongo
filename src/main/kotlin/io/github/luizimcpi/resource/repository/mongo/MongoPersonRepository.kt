@@ -49,6 +49,10 @@ class MongoPersonRepository: PersonRepository {
             .toList()
     }
 
+    override fun count(): Long {
+        return personCollection.countDocuments()
+    }
+
     companion object {
         const val MAXIMUM_PERSON_REGISTERS = 50
     }

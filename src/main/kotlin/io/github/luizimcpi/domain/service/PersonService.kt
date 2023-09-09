@@ -1,12 +1,10 @@
 package io.github.luizimcpi.domain.service
 
 import io.github.luizimcpi.domain.model.entity.Person
-import io.github.luizimcpi.resource.repository.mongo.MongoPersonRepository
+import io.github.luizimcpi.domain.repository.PersonRepository
 import io.ktor.server.plugins.requestvalidation.RequestValidationException
 
-class PersonService {
-
-    private val personRepository = MongoPersonRepository() //DI here cant instance class of external layer
+class PersonService(private val personRepository: PersonRepository) {
 
     fun create(person: Person): String? {
         if(personRepository.findByNickname(person.apelido).isNotEmpty()){

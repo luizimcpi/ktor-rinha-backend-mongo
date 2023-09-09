@@ -1,5 +1,6 @@
 package io.github.luizimcpi
 
+import io.github.luizimcpi.configuration.configureDependencyInjection
 import io.github.luizimcpi.configuration.configureRouting
 import io.github.luizimcpi.configuration.configureSerialization
 import io.github.luizimcpi.configuration.configureStatusPages
@@ -19,4 +20,5 @@ fun Application.module() {
     configureSerialization()
     configureValidation()
     configureStatusPages()
+    configureDependencyInjection()
 }

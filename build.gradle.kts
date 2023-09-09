@@ -4,6 +4,7 @@ val kotlin_version: String by project
 val logback_version: String by project
 val kmongo_version: String by project
 val mongo_embedded_version: String by project
+val koin_version: String by project
 
 
 plugins {
@@ -35,6 +36,8 @@ dependencies {
     implementation("org.litote.kmongo:kmongo:$kmongo_version")
     implementation("io.ktor:ktor-server-request-validation:$ktor_version")
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+    implementation("io.insert-koin:koin-core:$koin_version")
+    implementation("io.insert-koin:koin-ktor:$koin_version")
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")

@@ -1,16 +1,59 @@
 version: '3.4'
 services:
-  app:
+  api1:
     build:
       dockerfile: ./Dockerfile
       context: .
     image: luizimcpi/ktor-rinha-mongo-service
+    hostname: api1
     environment:
       - MONGO_URL=mongodb://root:root@database
-    ports:
-      - 8080:8080
+#    ports:
+#      - 8080:8080
     depends_on:
       - database
+    expose:
+      - "8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '0.5GB'
+  api2:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    image: luizimcpi/ktor-rinha-mongo-service
+    hostname: api2
+    environment:
+      - MONGO_URL=mongodb://root:root@database
+#    ports:
+#      - 8080:8080
+    depends_on:
+      - database
+    expose:
+      - "8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '0.5GB'
+
+  nginx: # Load Balancer
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api1
+      - api2
+    ports:
+      - "9999:9999"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '0.5GB'
+
   database:
     image: mongo:5.0
     restart: always
@@ -19,3 +62,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: '1.5GB'

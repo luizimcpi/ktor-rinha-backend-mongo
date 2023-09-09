@@ -9,4 +9,6 @@ interface PersonRepository {
     fun findByNickname(nickname: String): List<Person>
 
     fun findById(id: String): Person?
+
+    fun findByTerm(searchTerm: String): List<Person>
 }

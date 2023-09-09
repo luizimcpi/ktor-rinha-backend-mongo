@@ -17,4 +17,8 @@ class PersonService(private val personRepository: PersonRepository) {
     fun findById(id: String): Person? {
         return personRepository.findById(id)
     }
+
+    fun findByTerm(searchTerm: String): List<Person> {
+        return personRepository.findByTerm(searchTerm)
+    }
 }

@@ -2,6 +2,7 @@ package io.github.luizimcpi.web
 
 import io.github.luizimcpi.domain.extensions.toPerson
 import io.github.luizimcpi.domain.extensions.toPersonResponse
+import io.github.luizimcpi.domain.model.entity.Person
 import io.github.luizimcpi.domain.model.request.PersonRequest
 import io.github.luizimcpi.domain.model.response.ErrorResponse
 import io.github.luizimcpi.domain.service.PersonService
@@ -35,6 +36,13 @@ fun Route.personRouting() {
             personService.findById(id)
                 ?.let { foundPerson -> call.respond(foundPerson.toPersonResponse()) }
                 ?: call.respond(HttpStatusCode.NotFound, ErrorResponse.PERSON_NOT_FOUND_RESPONSE)
+        }
+        get {
+            call.request.queryParameters["t"]?.let { searchParam ->
+                personService.findByTerm(searchParam).let {
+                    people -> call.respond(people.map(Person::toPersonResponse).toList())
+                }
+            }?: call.respond(HttpStatusCode.BadRequest, ErrorResponse.BAD_REQUEST_RESPONSE)
         }
     }
 }
